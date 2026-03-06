@@ -24,7 +24,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/ tests/ && prettier --check src/ tests/",
-    "lint:fix": "eslint src/ tests/ --fix && prettier --write src/ tests/"
+    "lint:fix": "eslint src/ tests/ --fix && prettier --write src/ tests/",
+    "prepublishOnly": "npm run build && npm run typecheck && npm test && npm run lint"
   },
   "keywords": ["ppe", "policy-engine", "rules-engine", "parametric", "server", "rest"],
   "repository": {
