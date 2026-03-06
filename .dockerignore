@@ -1,0 +1,13 @@
+node_modules
+src
+tests
+.git
+.gitignore
+*.md
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+.eslintrc.*
+.prettierrc*
+.env*
+coverage
