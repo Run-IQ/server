@@ -1,6 +1,6 @@
 {
   "name": "@run-iq/server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "PPE — HTTP REST server for the Parametric Policy Engine",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -39,7 +39,7 @@
   "author": "Abdou-Raouf ATARMLA",
   "license": "MIT",
   "dependencies": {
-    "@run-iq/core": "^0.1.2",
+    "@run-iq/core": "^0.2.0",
     "fastify": "^5.0.0"
   },
   "devDependencies": {
