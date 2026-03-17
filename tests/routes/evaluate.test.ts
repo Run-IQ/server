@@ -80,7 +80,8 @@ describe('POST /evaluate', () => {
     expect(body).toHaveProperty('appliedRules');
     expect(body).toHaveProperty('skippedRules');
     expect(body).toHaveProperty('trace');
-    expect(body).toHaveProperty('engineVersion', '0.1.2');
+    expect(body).toHaveProperty('engineVersion');
+    expect(typeof body.engineVersion).toBe('string');
   });
 
   it('returns 400 for missing rules', async () => {

@@ -1,5 +1,6 @@
 import { describe, it, expect, afterAll } from 'vitest';
 import { createApp } from '../../src/app.js';
+import { SERVER_VERSION } from '../../src/version.js';
 
 describe('GET /health', () => {
   const app = createApp({ plugins: [], dsls: [], logLevel: 'silent' });
@@ -8,7 +9,7 @@ describe('GET /health', () => {
     await app.close();
   });
 
-  it('returns status ok with engine version', async () => {
+  it('returns status ok with server version', async () => {
     const response = await app.inject({
       method: 'GET',
       url: '/health',
@@ -18,7 +19,7 @@ describe('GET /health', () => {
     const body = response.json();
     expect(body).toEqual({
       status: 'ok',
-      engine: '0.1.2',
+      version: SERVER_VERSION,
     });
   });
 

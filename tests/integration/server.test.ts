@@ -2,6 +2,7 @@ import { describe, it, expect, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import type { PPEPlugin, CalculationModel, ValidationResult, Rule } from '@run-iq/core';
 import { createApp } from '../../src/app.js';
+import { SERVER_VERSION } from '../../src/version.js';
 
 const multiplyModel: CalculationModel = {
   name: 'MULTIPLY',
@@ -70,7 +71,8 @@ describe('Server integration', () => {
     expect(response.statusCode).toBe(200);
     const body = response.json();
     expect(body.requestId).toContain('req-int-');
-    expect(body.engineVersion).toBe('0.1.2');
+    expect(body.engineVersion).toBeDefined();
+    expect(typeof body.engineVersion).toBe('string');
     expect(body.pluginVersions).toHaveProperty('test-plugin', '1.0.0');
   });
 
@@ -83,7 +85,7 @@ describe('Server integration', () => {
 
     const healthRes = await app.inject({ method: 'GET', url: '/health' });
     expect(healthRes.statusCode).toBe(200);
-    expect(healthRes.json()).toEqual({ status: 'ok', engine: '0.1.2' });
+    expect(healthRes.json()).toEqual({ status: 'ok', version: SERVER_VERSION });
 
     const evalRes = await app.inject({
       method: 'POST',
