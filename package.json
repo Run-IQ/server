@@ -1,6 +1,6 @@
 {
   "name": "@run-iq/server",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "PPE — HTTP REST server for the Parametric Policy Engine",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -18,7 +18,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
@@ -27,7 +29,14 @@
     "lint:fix": "eslint src/ tests/ --fix && prettier --write src/ tests/",
     "prepublishOnly": "npm run build && npm run typecheck && npm test && npm run lint"
   },
-  "keywords": ["ppe", "policy-engine", "rules-engine", "parametric", "server", "rest"],
+  "keywords": [
+    "ppe",
+    "policy-engine",
+    "rules-engine",
+    "parametric",
+    "server",
+    "rest"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Run-IQ/server.git"
@@ -39,7 +48,7 @@
   "author": "Abdou-Raouf ATARMLA",
   "license": "MIT",
   "peerDependencies": {
-    "@run-iq/core": "^0.2.7"
+    "@run-iq/core": "^0.2.8"
   },
   "dependencies": {
     "fastify": "^5.0.0"
@@ -52,7 +61,7 @@
     "prettier": "^3.2.0",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0",
-    "vitest": "^1.3.0"
+    "vitest": "^4.1.0"
   },
   "engines": {
     "node": ">=20.0.0"

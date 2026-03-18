@@ -81,6 +81,7 @@ describe('Server integration', () => {
       plugins: [],
       dsls: [],
       logLevel: 'silent',
+      strict: false,
     });
 
     const healthRes = await app.inject({ method: 'GET', url: '/health' });

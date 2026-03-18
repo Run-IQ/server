@@ -8,32 +8,35 @@ import type {
   ISnapshotAdapter,
   Snapshot,
 } from '@run-iq/core';
-import { PPEError } from '@run-iq/core';
+import { PPEError, computeRuleChecksum } from '@run-iq/core';
 import { createApp } from '../src/app.js';
 
-// SHA-256 of JSON.stringify({})
-const EMPTY_PARAMS_CHECKSUM = '44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a';
+/**
+ * Builds a rule object and computes the correct checksum dynamically.
+ * computeRuleChecksum hashes the ENTIRE rule (minus `checksum`), not just params.
+ */
+function buildRule(overrides: Record<string, unknown> = {}) {
+  const base = {
+    id: 'r-1',
+    version: 1,
+    model: 'PASS',
+    params: {},
+    priority: 1,
+    effectiveFrom: '2020-01-01T00:00:00.000Z',
+    effectiveUntil: null,
+    tags: [],
+    ...overrides,
+  };
+  return { ...base, checksum: computeRuleChecksum(base) };
+}
 
 function buildValidBody(model = 'PASS', overrides?: Record<string, unknown>) {
   return {
-    rules: [
-      {
-        id: 'r-1',
-        version: 1,
-        model,
-        params: {},
-        priority: 1,
-        effectiveFrom: '2020-01-01T00:00:00.000Z',
-        effectiveUntil: null,
-        tags: [],
-        checksum: EMPTY_PARAMS_CHECKSUM,
-        ...overrides,
-      },
-    ],
+    rules: [buildRule({ model, ...overrides })],
     input: {
       requestId: `req-err-${Date.now()}-${Math.random()}`,
       data: { amount: 100 },
-      meta: { tenantId: 't1' },
+      meta: { tenantId: 't1', effectiveDate: '2025-01-15T00:00:00.000Z' },
     },
   };
 }
@@ -154,36 +157,24 @@ describe('Error handler', () => {
     });
     apps.push(app);
 
-    // Two rules with same priority → conflict in strict mode
+    // Two rules with same priority AND same dominanceGroup → conflict in strict mode
     const payload = {
       rules: [
-        {
+        buildRule({
           id: 'r-conflict-1',
-          version: 1,
-          model: 'PASS',
-          params: {},
           priority: 5,
-          effectiveFrom: '2020-01-01T00:00:00.000Z',
-          effectiveUntil: null,
-          tags: [],
-          checksum: EMPTY_PARAMS_CHECKSUM,
-        },
-        {
+          dominanceGroup: 'tax-group',
+        }),
+        buildRule({
           id: 'r-conflict-2',
-          version: 1,
-          model: 'PASS',
-          params: {},
           priority: 5,
-          effectiveFrom: '2020-01-01T00:00:00.000Z',
-          effectiveUntil: null,
-          tags: [],
-          checksum: EMPTY_PARAMS_CHECKSUM,
-        },
+          dominanceGroup: 'tax-group',
+        }),
       ],
       input: {
         requestId: `req-conflict-${Date.now()}`,
         data: { amount: 100 },
-        meta: { tenantId: 't1' },
+        meta: { tenantId: 't1', effectiveDate: '2025-01-15T00:00:00.000Z' },
       },
     };
 
