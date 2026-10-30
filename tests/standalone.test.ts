@@ -70,11 +70,16 @@ describe('loadPlugins', () => {
   });
 
   it('warns and skips when plugin package is not installed', async () => {
+    // simulate a missing package: it may be installed (e.g. in a workspace)
+    vi.doMock('@run-iq/plugin-fiscal', () => {
+      throw new Error('Cannot find module');
+    });
     const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const result = await loadPlugins(['fiscal']);
     expect(result).toEqual([]);
     expect(spy).toHaveBeenCalledWith(expect.stringContaining('not installed'));
     spy.mockRestore();
+    vi.doUnmock('@run-iq/plugin-fiscal');
   });
 });
 
@@ -93,10 +98,15 @@ describe('loadDSLs', () => {
   });
 
   it('warns and skips when DSL package is not installed', async () => {
+    // simulate a missing package: it may be installed (e.g. in a workspace)
+    vi.doMock('@run-iq/dsl-jsonlogic', () => {
+      throw new Error('Cannot find module');
+    });
     const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const result = await loadDSLs(['jsonlogic']);
     expect(result).toEqual([]);
     expect(spy).toHaveBeenCalledWith(expect.stringContaining('not installed'));
     spy.mockRestore();
+    vi.doUnmock('@run-iq/dsl-jsonlogic');
   });
 });
