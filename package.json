@@ -46,7 +46,7 @@
     "url": "https://github.com/Run-IQ/server/issues"
   },
   "author": "Abdou-Raouf ATARMLA",
-  "license": "MIT",
+  "license": "BUSL-1.1",
   "peerDependencies": {
     "@run-iq/core": "^0.2.8"
   },
