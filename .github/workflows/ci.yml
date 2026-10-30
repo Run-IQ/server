@@ -14,7 +14,8 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     env:
-      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Reads the private @run-iq packages (org secret: classic PAT, read:packages).
+      NODE_AUTH_TOKEN: ${{ secrets.RUN_IQ_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
